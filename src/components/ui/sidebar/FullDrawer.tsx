@@ -14,6 +14,7 @@ import {
   Box,
   useTheme,
   useMediaQuery,
+  Stack,
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import type { FC } from 'react';
@@ -60,26 +61,19 @@ const FullDrawer:FC<FullDrawerProps> = ({ courses, open, onClose }) => {
         },
       }}
     >
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          padding: theme.spacing(0, 1),
-          ...theme.mixins.toolbar,
-          justifyContent: 'flex-end',
-        }}
-      >
-        <IconButton onClick={onClose}>
-          <ChevronLeftIcon />
-        </IconButton>
-      </Box>
+
       <Box sx={{ overflow: 'auto', mt: 2 }}>
+        <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ px: 2, py: 1 }}>
         <Typography
           variant="h6"
           sx={{ px: 2, py: 1, color: 'text.secondary' }}
         >
           Mis Cursos
         </Typography>
+        <IconButton onClick={onClose}>
+          <ChevronLeftIcon />
+        </IconButton>
+        </Stack>
         <List>
           {courses.map((course) => (
             <ListItem key={course.id} disablePadding>

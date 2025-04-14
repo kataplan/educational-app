@@ -28,15 +28,16 @@ import Breadcrumb from '@/components/Breadcrumb';
 import { mockCourses, mockUnits } from '@/mocks/mockData';
 
 interface UnitsPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 const UnitsPage: FC<UnitsPageProps> = ({ params }) => {
   const router = useRouter();
-  const course = mockCourses.find(c => c.id === params.id);
-  const [units, setUnits] = useState(mockUnits.filter(u => u.courseId === params.id));
+  const resolvedParams = React.use(params);
+  const course = mockCourses.find(c => c.id === resolvedParams.id);
+  const [units, setUnits] = useState(mockUnits.filter(u => u.courseId === resolvedParams.id));
   
   const [openDialog, setOpenDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -106,7 +107,7 @@ const UnitsPage: FC<UnitsPageProps> = ({ params }) => {
       // Crear nueva unidad
       const newUnit = {
         id: String(Date.now()),
-        courseId: params.id,
+        courseId: resolvedParams.id,
         ...formData
       };
       setUnits([...units, newUnit]);
@@ -135,7 +136,7 @@ const UnitsPage: FC<UnitsPageProps> = ({ params }) => {
   };
 
   const handleUnitClick = (unitId: string): void => {
-    router.push(`/courses/${params.id}/units/${unitId}`);
+    router.push(`/courses/${resolvedParams.id}/units/${unitId}`);
   };
 
   return (
