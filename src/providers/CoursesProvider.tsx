@@ -1,6 +1,7 @@
 'use client';
 
-import { ReactNode, createContext, useContext, useState, useEffect } from 'react';
+import { FC, PropsWithChildren, createContext, useContext, useState, useEffect } from 'react';
+
 import { mockCourses } from '@/mocks/mockData';
 
 export interface Course {
@@ -22,7 +23,7 @@ interface CoursesContextType {
 
 const CoursesContext = createContext<CoursesContextType | undefined>(undefined);
 
-export function useCourses() {
+const useCourses = (): CoursesContextType => {
   const context = useContext(CoursesContext);
   if (context === undefined) {
     throw new Error('useCourses must be used within a CoursesProvider');
@@ -30,11 +31,8 @@ export function useCourses() {
   return context;
 }
 
-interface CoursesProviderProps {
-  children: ReactNode;
-}
 
-export function CoursesProvider({ children }: CoursesProviderProps) {
+const CoursesProvider: FC<PropsWithChildren> = ({ children }): React.ReactElement => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
@@ -42,7 +40,7 @@ export function CoursesProvider({ children }: CoursesProviderProps) {
 
   // Cargar cursos al iniciar
   useEffect(() => {
-    const loadCourses = async () => {
+    const loadCourses = async (): Promise<void> => {
       try {
         setLoading(true);
         // En una aplicación real, aquí haríamos una llamada a la API
@@ -63,7 +61,7 @@ export function CoursesProvider({ children }: CoursesProviderProps) {
   }, []);
 
   // Buscar cursos por título o descripción
-  const searchCourses = (query: string) => {
+  const searchCourses = (query: string): void => {
     if (!query.trim()) {
       setFilteredCourses(courses);
       return;
@@ -79,12 +77,12 @@ export function CoursesProvider({ children }: CoursesProviderProps) {
   };
 
   // Obtener un curso por ID
-  const getCourseById = (id: string) => {
+  const getCourseById = (id: string): Course | undefined => {
     return courses.find(course => course.id === id);
   };
 
   // Añadir un nuevo curso
-  const addCourse = (newCourse: Omit<Course, 'id'>) => {
+  const addCourse = (newCourse: Omit<Course, 'id'>): void => {
     const id = Date.now().toString(); // Generar ID único
     const course: Course = { ...newCourse, id };
     setCourses(prev => [...prev, course]);
@@ -92,7 +90,7 @@ export function CoursesProvider({ children }: CoursesProviderProps) {
   };
 
   // Actualizar un curso existente
-  const updateCourse = (id: string, updatedData: Partial<Course>) => {
+  const updateCourse = (id: string, updatedData: Partial<Course>): void => {
     setCourses(prev => 
       prev.map(course => 
         course.id === id ? { ...course, ...updatedData } : course
@@ -106,7 +104,7 @@ export function CoursesProvider({ children }: CoursesProviderProps) {
   };
 
   // Eliminar un curso
-  const deleteCourse = (id: string) => {
+  const deleteCourse = (id: string): void => {
     setCourses(prev => prev.filter(course => course.id !== id));
     setFilteredCourses(prev => prev.filter(course => course.id !== id));
   };
@@ -128,3 +126,5 @@ export function CoursesProvider({ children }: CoursesProviderProps) {
     </CoursesContext.Provider>
   );
 }
+
+export { CoursesProvider, useCourses };
