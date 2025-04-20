@@ -2,7 +2,7 @@
 
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
-import { ReactNode, useState, useEffect, createContext, useContext } from 'react';
+import { FC, PropsWithChildren, useState, useEffect, createContext, useContext } from 'react';
 
 import { lightTheme, darkTheme } from '@/theme/theme';
 
@@ -11,11 +11,11 @@ type ThemeMode = 'light' | 'dark';
 interface ThemeContextType {
   themeMode: ThemeMode;
   toggleTheme: () => void;
-}
+  }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export function useThemeContext() {
+const useThemeContext = (): ThemeContextType => {
   const context = useContext(ThemeContext);
   if (context === undefined) {
     throw new Error('useThemeContext must be used within a ThemeProvider');
@@ -23,9 +23,7 @@ export function useThemeContext() {
   return context;
 }
 
-interface ThemeProviderProps {
-  children: ReactNode;
-}
+
 const getThemeMode = (): ThemeMode => {
   const savedTheme = localStorage.getItem('themeMode') as ThemeMode;
 
@@ -36,7 +34,7 @@ const getThemeMode = (): ThemeMode => {
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 
 }
-export function ThemeProvider({ children }: ThemeProviderProps) {
+const ThemeProvider: FC<PropsWithChildren> = ({ children }): React.ReactElement => {
   const [themeMode, setThemeMode] = useState<ThemeMode>(getThemeMode());
 
   // Guardar preferencia de tema en localStorage cuando cambie
@@ -44,9 +42,8 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     localStorage.setItem('themeMode', themeMode);
   }, [themeMode]);
 
-  const toggleTheme = () => {
+  const toggleTheme = (): void => {
     setThemeMode(prevMode => prevMode === 'light' ? 'dark' : 'light');
-    console.log(themeMode);
   };
 
   const theme = themeMode === 'light' ? lightTheme : darkTheme;
@@ -60,3 +57,5 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     </ThemeContext.Provider>
   );
 } 
+
+export { ThemeProvider, useThemeContext };
