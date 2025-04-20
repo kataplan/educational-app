@@ -1,10 +1,13 @@
 'use client';
 
+import {
+  LibraryBooks as LibraryBooksIcon,
+  Timeline as TimelineIcon,
+} from '@mui/icons-material';
 import { Box, Typography, Paper, Container, Stack } from '@mui/material';
-import TimelineIcon from '@mui/icons-material/Timeline';
-import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
+import { FC } from 'react';
 
-export default function Home() {
+const Home: FC = () => {
   return (
     <Container maxWidth="lg">
       <Box sx={{ mt: 4, mb: 4 }}>
@@ -61,3 +64,5 @@ export default function Home() {
     </Container>
   );
 }
+
+export default Home;

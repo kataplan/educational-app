@@ -1,8 +1,6 @@
 'use client';
 
-import { useState } from 'react';
-import { notFound } from 'next/navigation';
-import { useRouter } from 'next/navigation';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import {
   Box,
   Typography,
@@ -17,9 +15,12 @@ import {
   CircularProgress,
   Divider
 } from '@mui/material';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import Breadcrumb from '@/components/Breadcrumb';
 import { styled } from '@mui/material/styles';
+import { notFound , useRouter } from 'next/navigation';
+import React, { FC, useState } from 'react';
+
+import Breadcrumb from '@/components/Breadcrumb';
+
 
 // Datos de ejemplo - En una aplicación real, esto vendría de una API o base de datos
 const mockCourses = [
@@ -69,7 +70,7 @@ interface AddMaterialPageProps {
   };
 }
 
-export default function AddMaterialPage({ params }: AddMaterialPageProps) {
+const AddMaterialPage: FC<AddMaterialPageProps> = ({ params }) => {
   const router = useRouter();
   const course = mockCourses.find(c => c.id === params.id);
   
@@ -85,13 +86,13 @@ export default function AddMaterialPage({ params }: AddMaterialPageProps) {
     notFound();
   }
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.files && event.target.files.length > 0) {
       setFile(event.target.files[0]);
     }
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = (event: React.FormEvent): void => {
     event.preventDefault();
     
     if (!title.trim()) {
@@ -235,3 +236,5 @@ export default function AddMaterialPage({ params }: AddMaterialPageProps) {
     </Box>
   );
 } 
+
+export default AddMaterialPage;

@@ -1,8 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import {
+  Visibility,
+  VisibilityOff,
+  Login as LoginIcon,
+} from '@mui/icons-material';
 import {
   Box,
   Typography,
@@ -15,13 +17,11 @@ import {
   Alert,
   Divider,
 } from '@mui/material';
-import {
-  Visibility,
-  VisibilityOff,
-  Login as LoginIcon,
-} from '@mui/icons-material';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import React, { FC, useState } from 'react';
 
-export default function LoginPage() {
+const LoginPage: FC = () => {
   const router = useRouter();
   const [formData, setFormData] = useState({
     email: '',
@@ -31,7 +31,7 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -39,7 +39,7 @@ export default function LoginPage() {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     setError('');
     setLoading(true);
@@ -109,7 +109,6 @@ export default function LoginPage() {
               label="Correo electrónico"
               name="email"
               autoComplete="email"
-              autoFocus
               value={formData.email}
               onChange={handleChange}
             />
@@ -175,3 +174,5 @@ export default function LoginPage() {
     </Container>
   );
 } 
+
+export default LoginPage;

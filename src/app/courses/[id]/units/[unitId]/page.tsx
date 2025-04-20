@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
-import { notFound } from 'next/navigation';
-import { useRouter } from 'next/navigation';
+import AddIcon from '@mui/icons-material/Add';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import DeleteIcon from '@mui/icons-material/Delete';
+import DescriptionIcon from '@mui/icons-material/Description';
 import {
   Box,
   Typography,
@@ -22,10 +23,9 @@ import {
   DialogActions,
   Alert
 } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
-import DescriptionIcon from '@mui/icons-material/Description';
-import AssignmentIcon from '@mui/icons-material/Assignment';
+import { notFound , useRouter } from 'next/navigation';
+import React, { FC, PropsWithChildren, useState } from 'react';
+
 import Breadcrumb from '@/components/Breadcrumb';
 import { mockCourses, mockMaterials, mockTests, mockUnits } from '@/mocks/mockData';
 
@@ -36,22 +36,18 @@ interface UnitPageProps {
   }>;
 }
 
-interface TabPanelProps {
-  children?: React.ReactNode;
+interface TabPanelProps extends PropsWithChildren {
   index: number;
   value: number;
 }
 
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
+const TabPanel: FC<TabPanelProps> = ({ children, value, index }) => {
   return (
     <div
       role="tabpanel"
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
-      {...other}
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
@@ -62,7 +58,7 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
-export default function UnitPage({ params }: UnitPageProps) {
+const UnitPage: FC<UnitPageProps> = ({ params }) => {
   const router = useRouter();
   const resolvedParams = React.use(params);
   const courseId = resolvedParams.id;
@@ -87,24 +83,24 @@ export default function UnitPage({ params }: UnitPageProps) {
     notFound();
   }
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number): void => {
     setTabValue(newValue);
   };
 
-  const handleAddMaterial = () => {
+  const handleAddMaterial = (): void => {
     router.push(`/courses/${courseId}/materials/add?unitId=${unitId}`);
   };
 
-  const handleAddTest = () => {
+  const handleAddTest = (): void => {
     router.push(`/courses/${courseId}/tests/create?unitId=${unitId}`);
   };
 
-  const handleDeleteMaterialClick = (materialId: string) => {
+  const handleDeleteMaterialClick = (materialId: string): void => {
     setMaterialToDelete(materialId);
     setDeleteMaterialDialogOpen(true);
   };
 
-  const handleDeleteMaterialConfirm = () => {
+  const handleDeleteMaterialConfirm = (): void   => {
     if (materialToDelete) {
       // En una aplicación real, aquí se haría una llamada a la API
       setMaterials(materials.filter(m => m.id !== materialToDelete));
@@ -119,17 +115,17 @@ export default function UnitPage({ params }: UnitPageProps) {
     }
   };
 
-  const handleDeleteMaterialCancel = () => {
+  const handleDeleteMaterialCancel = (): void  => {
     setDeleteMaterialDialogOpen(false);
     setMaterialToDelete(null);
   };
 
-  const handleDeleteTestClick = (testId: string) => {
+  const handleDeleteTestClick = (testId: string): void => {
     setTestToDelete(testId);
     setDeleteTestDialogOpen(true);
   };
 
-  const handleDeleteTestConfirm = () => {
+  const handleDeleteTestConfirm = (): void => {
     if (testToDelete) {
       // En una aplicación real, aquí se haría una llamada a la API
       setTests(tests.filter(t => t.id !== testToDelete));
@@ -144,7 +140,7 @@ export default function UnitPage({ params }: UnitPageProps) {
     }
   };
 
-  const handleDeleteTestCancel = () => {
+  const handleDeleteTestCancel = (): void => {
     setDeleteTestDialogOpen(false);
     setTestToDelete(null);
   };
@@ -340,7 +336,7 @@ export default function UnitPage({ params }: UnitPageProps) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDeleteMaterialCancel}>Cancelar</Button>
-          <Button onClick={handleDeleteMaterialConfirm} color="error" autoFocus>
+          <Button onClick={handleDeleteMaterialConfirm} color="error">
             Eliminar
           </Button>
         </DialogActions>
@@ -359,7 +355,7 @@ export default function UnitPage({ params }: UnitPageProps) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDeleteTestCancel}>Cancelar</Button>
-          <Button onClick={handleDeleteTestConfirm} color="error" autoFocus>
+          <Button onClick={handleDeleteTestConfirm} color="error">
             Eliminar
           </Button>
         </DialogActions>
@@ -367,3 +363,5 @@ export default function UnitPage({ params }: UnitPageProps) {
     </Box>
   );
 } 
+
+export default UnitPage;

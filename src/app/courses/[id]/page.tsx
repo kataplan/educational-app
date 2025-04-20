@@ -1,5 +1,6 @@
 'use client';
 
+
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -21,7 +22,7 @@ import {
   Divider,
   ListItemButton
 } from '@mui/material';
-import { notFound , useRouter } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
 import React, { useState, type FC } from 'react';
 
 import Breadcrumb from '@/components/Breadcrumb';

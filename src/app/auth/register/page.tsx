@@ -1,8 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import {
+  Visibility,
+  VisibilityOff,
+  PersonAdd as PersonAddIcon,
+} from '@mui/icons-material';
 import {
   Box,
   Typography,
@@ -15,13 +17,11 @@ import {
   Alert,
   Divider,
 } from '@mui/material';
-import {
-  Visibility,
-  VisibilityOff,
-  PersonAdd as PersonAddIcon,
-} from '@mui/icons-material';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import React, { FC, useState } from 'react';
 
-export default function RegisterPage() {
+const RegisterPage: FC = () => {
   const router = useRouter();
   const [formData, setFormData] = useState({
     name: '',
@@ -31,9 +31,9 @@ export default function RegisterPage() {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);  
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -41,7 +41,7 @@ export default function RegisterPage() {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     setError('');
 
@@ -123,7 +123,6 @@ export default function RegisterPage() {
               label="Nombre completo"
               name="name"
               autoComplete="name"
-              autoFocus
               value={formData.name}
               onChange={handleChange}
             />
@@ -212,3 +211,5 @@ export default function RegisterPage() {
     </Container>
   );
 } 
+
+export default RegisterPage;

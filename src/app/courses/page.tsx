@@ -1,9 +1,11 @@
 'use client';
 
-import AddIcon from '@mui/icons-material/Add';
-import CloseIcon from '@mui/icons-material/Close';
-import SchoolIcon from '@mui/icons-material/School';
-import SearchIcon from '@mui/icons-material/Search';
+import {
+  Add as AddIcon,
+  Close as CloseIcon,
+  School as SchoolIcon,
+  Search as SearchIcon,
+} from '@mui/icons-material';
 import {
   Box,
   Typography,
@@ -24,12 +26,12 @@ import {
   Snackbar,
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import React, { useState, useMemo } from 'react';
+import React, { FC,   useState, useMemo } from 'react';
 
 import Breadcrumb from '@/components/Breadcrumb';
 import { mockCourses } from '@/mocks/mockData';
 
-export default function CoursesPage() {
+const CoursesPage: FC = () => {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [openDialog, setOpenDialog] = useState(false);
@@ -37,25 +39,25 @@ export default function CoursesPage() {
   const [courses, setCourses] = useState(mockCourses);
   const [snackbar, setSnackbar] = useState({ open: false, message: '' });
 
-  const handleCourseClick = (courseId: string) => {
+  const handleCourseClick = (courseId: string): void => {
     router.push(`/courses/${courseId}`);
   };
 
-  const handleOpenDialog = () => {
+  const handleOpenDialog = (): void => {
     setOpenDialog(true);
   };
 
-  const handleCloseDialog = () => {
+  const handleCloseDialog = (): void => {
     setOpenDialog(false);
     setNewCourse({ title: '', description: '' });
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setNewCourse(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleCreateCourse = () => {
+  const handleCreateCourse = (): void => {
     if (!newCourse.title.trim() || !newCourse.description.trim()) {
       return;
     }
@@ -81,7 +83,7 @@ export default function CoursesPage() {
     handleCloseDialog();
   };
 
-  const handleCloseSnackbar = () => {
+  const handleCloseSnackbar = (): void => {
     setSnackbar(prev => ({ ...prev, open: false }));
   };
 
@@ -280,3 +282,5 @@ export default function CoursesPage() {
     </Container>
   );
 }
+
+export default CoursesPage;
