@@ -3,11 +3,11 @@
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { IconButton, Tooltip } from '@mui/material';
-import React from 'react';
+import React, { FC } from 'react';
 
 import { useThemeContext } from '@/providers/ThemeProvider';
 
-export default function ThemeToggle(): React.ReactElement {
+const ThemeToggle: FC = (): React.ReactElement => {
   const { themeMode, toggleTheme } = useThemeContext();
 
   return (
@@ -18,3 +18,5 @@ export default function ThemeToggle(): React.ReactElement {
     </Tooltip>
   );
 } 
+
+export default ThemeToggle;

@@ -11,7 +11,7 @@ const AuthGuard: FC<PropsWithChildren> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const checkAuth = () => {
+    const checkAuth = (): void => {
       const token = localStorage.getItem('authToken');
       const user = localStorage.getItem('user');
 

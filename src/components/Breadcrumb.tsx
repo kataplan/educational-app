@@ -12,7 +12,7 @@ import {
   useTheme
 } from '@mui/material';
 import { usePathname } from 'next/navigation';
-import React from 'react';
+import React, { FC } from 'react';
 
 import { mockCourses } from '@/mocks/mockData';
 
@@ -27,7 +27,7 @@ const routeNames: Record<string, string> = {
   'units': 'Unidad',
 };
 
-export default function Breadcrumb(): React.ReactElement {
+const Breadcrumb: FC = (): React.ReactElement => {
   const pathname = usePathname();
   const theme = useTheme();
   
@@ -136,3 +136,5 @@ export default function Breadcrumb(): React.ReactElement {
     </Box>
   );
 } 
+
+export default Breadcrumb;

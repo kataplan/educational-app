@@ -1,13 +1,10 @@
 'use client';
 
 import { Box } from '@mui/material';
-import type { ReactNode } from "react";
+import React, { FC, PropsWithChildren } from 'react';
 
-interface ViewContainerProps {
-  children: ReactNode;
-}
 
-export default function ViewContainer({ children }: ViewContainerProps): React.ReactElement {
+const ViewContainer: FC<PropsWithChildren> = ({ children }): React.ReactElement => {
   
   return (
     <Box
@@ -24,3 +21,5 @@ export default function ViewContainer({ children }: ViewContainerProps): React.R
     </Box>
   );
 } 
+
+export default ViewContainer;
