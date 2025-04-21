@@ -16,11 +16,10 @@ import {
   Divider
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { notFound , useRouter } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
 import React, { FC, useState } from 'react';
 
 import Breadcrumb from '@/components/Breadcrumb';
-
 
 // Datos de ejemplo - En una aplicación real, esto vendría de una API o base de datos
 const mockCourses = [
@@ -64,15 +63,17 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
-interface AddMaterialPageProps {
-  params: {
+interface PageProps {
+  params: Promise<{
     id: string;
-  };
+    unitId: string;
+  }>;
 }
 
-const AddMaterialPage: FC<AddMaterialPageProps> = ({ params }) => {
-  const router = useRouter();
-  const course = mockCourses.find(c => c.id === params.id);
+const AddMaterialPage: FC<PageProps> = ({ params }) => {
+  const router = useRouter(); 
+  const resolvedParams = React.use(params);
+  const course = mockCourses.find(c => c.id === resolvedParams.id);
   
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');

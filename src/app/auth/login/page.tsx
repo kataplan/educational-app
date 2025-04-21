@@ -21,6 +21,14 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { FC, useState } from 'react';
 
+import { useLocalStorage } from '@/hooks/useLocalStorage';
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
 const LoginPage: FC = () => {
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -30,6 +38,8 @@ const LoginPage: FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [, setAuthToken] = useLocalStorage<string>('authToken', '');
+  const [, setUser] = useLocalStorage<User | null>('user', null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
@@ -49,13 +59,13 @@ const LoginPage: FC = () => {
       // Por ahora, simulamos una autenticación exitosa
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Guardar token en localStorage (en una app real, usaríamos cookies seguras)
-      localStorage.setItem('authToken', 'mock-token');
-      localStorage.setItem('user', JSON.stringify({ 
+      // Guardar token y usuario usando el hook
+      setAuthToken('mock-token');
+      setUser({ 
         id: '1', 
         name: 'Usuario Demo', 
         email: formData.email 
-      }));
+      });
       
       // Redirigir al dashboard
       router.push('/courses');

@@ -4,14 +4,14 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import { FC, PropsWithChildren, useState, useEffect, createContext, useContext } from 'react';
 
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { lightTheme, darkTheme } from '@/theme/theme';
-
 type ThemeMode = 'light' | 'dark';
 
 interface ThemeContextType {
   themeMode: ThemeMode;
   toggleTheme: () => void;
-  }
+}
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
@@ -23,27 +23,24 @@ const useThemeContext = (): ThemeContextType => {
   return context;
 }
 
-
-const getThemeMode = (): ThemeMode => {
-  const savedTheme = localStorage.getItem('themeMode') as ThemeMode;
-
-  if (savedTheme) {
-    return savedTheme;
-  }
-
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-
-}
 const ThemeProvider: FC<PropsWithChildren> = ({ children }): React.ReactElement => {
-  const [themeMode, setThemeMode] = useState<ThemeMode>(getThemeMode());
+  const [savedTheme, setSavedTheme] = useLocalStorage<ThemeMode>('themeMode', 'light');
+  const [themeMode, setThemeMode] = useState<ThemeMode>(savedTheme);
 
-  // Guardar preferencia de tema en localStorage cuando cambie
-  useEffect(() => {
-    localStorage.setItem('themeMode', themeMode);
-  }, [themeMode]);
+  // Initialize theme based on system preference if no saved theme
+  useEffect((): void => {
+    if (typeof window !== 'undefined' && !savedTheme) {
+      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const initialTheme: ThemeMode = systemPrefersDark ? 'dark' : 'light';
+      setThemeMode(initialTheme);
+      setSavedTheme(initialTheme);
+    }
+  }, [savedTheme, setSavedTheme]);
 
   const toggleTheme = (): void => {
-    setThemeMode(prevMode => prevMode === 'light' ? 'dark' : 'light');
+    const newTheme: ThemeMode = themeMode === 'light' ? 'dark' : 'light';
+    setThemeMode(newTheme);
+    setSavedTheme(newTheme);
   };
 
   const theme = themeMode === 'light' ? lightTheme : darkTheme;

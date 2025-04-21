@@ -4,19 +4,18 @@ import { Box, CircularProgress } from '@mui/material';
 import { useRouter, usePathname } from 'next/navigation';
 import React, { FC, useState, useEffect, PropsWithChildren } from 'react';
 
-
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 const AuthGuard: FC<PropsWithChildren> = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
+  const [authToken, _setAuthToken] = useLocalStorage('authToken', '');
+  const [user, _setUser] = useLocalStorage('user', null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const checkAuth = (): void => {
-      const token = localStorage.getItem('authToken');
-      const user = localStorage.getItem('user');
-
       // Si no hay token o usuario, y no estamos en una ruta de auth, redirigir al login
-      if (!token || !user) {
+      if (!authToken || !user) {
         if (!pathname?.startsWith('/auth/')) {
           router.push('/auth/login');
           return;
@@ -24,7 +23,7 @@ const AuthGuard: FC<PropsWithChildren> = ({ children }) => {
       }
 
       // Si hay token y usuario, y estamos en una ruta de auth, redirigir al dashboard
-      if (token && user && pathname?.startsWith('/auth/')) {
+      if (authToken && user && pathname?.startsWith('/auth/')) {
         router.push('/courses');
         return;
       }
@@ -33,7 +32,7 @@ const AuthGuard: FC<PropsWithChildren> = ({ children }) => {
     };
 
     checkAuth();
-  }, [pathname, router]);
+  }, [pathname, router, authToken, user]);
 
   if (isLoading) {
     return (
